@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Happy bithday Baby Girl Rose</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* CSS for the birthday box */
+    .birthday-box {
+      position: relative;
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+      background-image: url("https://goforusschools.com/wp-content/uploads/2023/07/WhatsApp-Image-2023-07-17-at-12.52.26.jpg"), linear-gradient(135deg, #ff0, #f0f);
+      background-size: contain, 100% 100%;
+      background-repeat: no-repeat;
+      animation: flicker 1s infinite;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .birthday-box img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* CSS for the profile picture upload */
+    .profile-upload {
+      display: none;
+    }
+
+    /* CSS for the candle animation */
+    @keyframes flicker {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      75% {
+        opacity: 0.9;
+      }
+      25% {
+        opacity: 0.7;
+      }
+    }
+
+    /* CSS for the scattering flowers */
+    .flower {
+      position: absolute;
+      width: 50%;
+      height: 10%;
+      background-image: url("flower.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* CSS for the surrounding emojis */
+    .surrounding-emojis {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: calc(100% + 20px);
+      height: calc(100% + 20px);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .emoji {
+      font-size: 8vw;
+      animation: flame 1s infinite;
+    }
+
+    @keyframes flame {
+      0%, 100% {
+        color: red;
+        text-shadow: 0 0 1vw #f00, 0 0 2vw #f00, 0 0 3vw #f00, 0 0 4vw #f00, 0 0 5vw #f00;
+      }
+      50% {
+        color: orange;
+        text-shadow: 0 0 1vw #ff8800, 0 0 2vw #ff8800, 0 0 3vw #ff8800, 0 0 4vw #ff8800, 0 0 5vw #ff8800;
+      }
+    }
+
+    /* CSS for the corner flames */
+    .corner-flame {
+      position: absolute;
+      font-size: 6vw;
+      color: red;
+      text-shadow: 0 0 1vw #f00, 0 0 2vw #f00, 0 0 3vw #f00, 0 0 4vw #f00, 0 0 5vw #f00;
+    }
+
+    .top-left {
+      top: -10px;
+      left: -10px;
+    }
+
+    .top-right {
+      top: -10px;
+      right: -10px;
+    }
+
+    .bottom-left {
+      bottom: -10px;
+      left: -10px;
+    }
+
+    .bottom-right {
+      bottom: -10px;
+      right: -10px;
+    }
+
+    /* CSS for the title */
+    .title {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 8vw;
+      font-weight: bold;
+    }
+
+    /* Media queries for responsive design */
+    @media (max-width: 768px) {
+      .birthday-box {
+        margin: 0;
+        border-radius: 0;
+      }
+      .title {
+        font-size: 6vw;
+        margin-top: 5px;
+      }
+      .emoji {
+        font-size: 6vw;
+      }
+      .corner-flame {
+        font-size: 4vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="birthday-box" onclick="toggleHappyBirthdayMusic()" ondblclick="openFileInput()">
+    <div class="surrounding-emojis">
+      <div class="emoji top-left">❤️</div>
+      <div class="emoji top-right">💖</div>
+    </div>
+    <img id="profile-image" src="https://goforusschools.com/wp-content/uploads/2023/07/WhatsApp-Image-2023-07-17-at-12.52.26.jpg" alt="Profile Image">
+    <input type="file" id="profile-picture" accept="image/*" class="profile-upload">
+    <div class="corner-flame top-left">🔥</div>
+    <div class="corner-flame top-right">🔥</div>
+    <div class="corner-flame bottom-left">🔥</div>
+    <div class="corner-flame bottom-right">🔥</div>
+
+    <h2 class="title">Happy bithday Baby Girl Rose</h2>
+  </div>
+  <script>
+    // JavaScript to handle profile picture upload and display
+    const fileInput = document.getElementById('profile-picture');
+    const profileImage = document.getElementById('profile-image');
+    let longPressTimer;
+    let isLongPress = false;
+    let musicPlaying = false;
+
+    // Check if image data is stored in local storage
+    if (localStorage.getItem('profileImage')) {
+      profileImage.src = localStorage.getItem('profileImage');
+    }
+
+    function handleTouchStart(event) {
+      event.preventDefault();
+      longPressTimer = setTimeout(() => {
+        isLongPress = true;
+        fileInput.click();
+      }, 3000);
+    }
+
+    function handleTouchEnd(event) {
+      event.preventDefault();
+      clearTimeout(longPressTimer);
+      if (!isLongPress) {
+        createScatteringFlowers();
+        toggleHappyBirthdayMusic();
+      }
+      isLongPress = false;
+    }
+
+    function handleChangeImage(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        profileImage.src = e.target.result;
+
+        // Store image data in local storage
+        localStorage.setItem('profileImage', e.target.result);
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function createScatteringFlowers() {
+      const container = document.querySelector('.birthday-box');
+      const containerRect = container.getBoundingClientRect();
+      const numFlowers = 20;
+
+      for (let i = 0; i < numFlowers; i++) {
+        const flower = document.createElement('div');
+        flower.classList.add('flower');
+
+        const randomX = getRandomNumber(containerRect.left, containerRect.right);
+        const randomY = getRandomNumber(containerRect.top, containerRect.bottom);
+        flower.style.left = randomX + 'px';
+        flower.style.top = randomY + 'px';
+
+        container.appendChild(flower);
+      }
+
+      setTimeout(() => {
+        const flowers = document.querySelectorAll('.flower');
+        flowers.forEach((flower) => flower.remove());
+      }, 2000);
+    }
+
+    function getRandomNumber(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function toggleHappyBirthdayMusic() {
+      const audio = document.getElementById('happy-birthday-instrument');
+      if (musicPlaying) {
+        audio.pause();
+        musicPlaying = false;
+      } else {
+        audio.currentTime = 0;
+        audio.play();
+        musicPlaying = true;
+      }
+    }
+
+    function openFileInput() {
+      fileInput.click();
+    }
+
+    fileInput.addEventListener('change', handleChangeImage);
+  </script>
+  <audio id="happy-birthday-instrument" src="https://goforusschools.com/wp-content/uploads/2023/07/HAPPY-Birthday-Song-–-Happy-Birthday-to-You.mp3"></audio>
+</body>
+</html>
